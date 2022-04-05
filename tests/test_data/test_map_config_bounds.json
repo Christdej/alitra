@@ -1,0 +1,55 @@
+{
+  "name": "test_map_bounds",
+  "reference_positions": {
+    "positions": [
+      {
+        "x": 10,
+        "y": 20,
+        "z": 30,
+        "frame": {
+          "name": "robot"
+        }
+      },
+      {
+        "x": 40,
+        "y": 50,
+        "z": 60,
+        "frame": {
+          "name": "robot"
+        }
+      },
+      {
+        "x": 70,
+        "y": 80,
+        "z": 90,
+        "frame": {
+          "name": "robot"
+        }
+      }
+    ],
+    "frame": {
+      "name": "robot"
+    }
+  },
+  "frame": {
+    "name": "robot"
+  },
+  "bounds": {
+    "position1": {
+      "x": 5,
+      "y": 15,
+      "z": 30,
+      "frame": {
+        "name": "robot"
+      }
+    },
+    "position2": {
+      "x": 80,
+      "y": 90,
+      "z": 100,
+      "frame": {
+        "name": "robot"
+      }
+    }
+  }
+}

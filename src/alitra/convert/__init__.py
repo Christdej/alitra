@@ -1,1 +1,1 @@
-from alitra.convert.quaternion import quaternion_to_euler
+from .convert import euler_to_quaternion, quaternion_to_euler
