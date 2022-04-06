@@ -3,25 +3,25 @@
     "reference_positions": {
         "positions": [
             {
-                "x": 10,
-                "y": 20,
-                "z": 30,
-                "frame": {
-                    "name": "asset"
-                }
-            },
-            {
-                "x": 40,
-                "y": 50,
-                "z": 60,
-                "frame": {
-                    "name": "asset"
-                }
-            },
-            {
                 "x": 70,
-                "y": 80,
-                "z": 90,
+                "y": 30,
+                "z": 0,
+                "frame": {
+                    "name": "asset"
+                }
+            },
+            {
+                "x": 60,
+                "y": 70,
+                "z": 0,
+                "frame": {
+                    "name": "asset"
+                }
+            },
+            {
+                "x": 10,
+                "y": 90,
+                "z": 0,
                 "frame": {
                     "name": "asset"
                 }

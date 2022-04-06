@@ -3,25 +3,25 @@
   "reference_positions": {
     "positions": [
       {
-        "x": 10,
+        "x": 20,
+        "y": 10,
+        "z": 0,
+        "frame": {
+          "name": "robot"
+        }
+      },
+      {
+        "x": 60,
         "y": 20,
-        "z": 30,
+        "z": 0,
         "frame": {
           "name": "robot"
         }
       },
       {
-        "x": 40,
-        "y": 50,
-        "z": 60,
-        "frame": {
-          "name": "robot"
-        }
-      },
-      {
-        "x": 70,
-        "y": 80,
-        "z": 90,
+        "x": 80,
+        "y": 70,
+        "z": 0,
         "frame": {
           "name": "robot"
         }
@@ -36,16 +36,16 @@
   },
   "bounds": {
     "position1": {
-      "x": 5,
-      "y": 15,
-      "z": 30,
+      "x": 0,
+      "y": 0,
+      "z": 0,
       "frame": {
         "name": "robot"
       }
     },
     "position2": {
-      "x": 80,
-      "y": 90,
+      "x": 100,
+      "y": 100,
       "z": 100,
       "frame": {
         "name": "robot"

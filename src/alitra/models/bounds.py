@@ -6,8 +6,8 @@ from .position import Position
 @dataclass
 class Bounds:
     """
-    Bounds defines the square bounds of which the map should be valid inside.
-    Position 1 and 2 should be on the diagonal corners of the bounding square.
+    Bounds defines the cube bounds of which the map should be valid inside.
+    Position 1 and 2 should be on the diagonal corners of the bounding cube.
     """
 
     position1: Position
@@ -26,15 +26,15 @@ class Bounds:
         self.z_max = max(position.z for position in positions)
         self.z_min = min(position.z for position in positions)
 
-    def position_within_bounds(self, Position: Position) -> bool:
-        if not Position.frame == self.frame:
+    def position_within_bounds(self, position: Position) -> bool:
+        if not position.frame == self.frame:
             raise TypeError(
-                f"The Position is in {Position.frame} frame and the bounds are in {self.frame} frame"
+                f"The position is in {position.frame} frame and the bounds are in {self.frame} frame"
             )
-        if Position.x < self.x_min or Position.x > self.x_max:
+        if position.x < self.x_min or position.x > self.x_max:
             return False
-        if Position.y < self.y_min or Position.y > self.y_max:
+        if position.y < self.y_min or position.y > self.y_max:
             return False
-        if Position.z < self.z_min or Position.z > self.z_max:
+        if position.z < self.z_min or position.z > self.z_max:
             return False
         return True

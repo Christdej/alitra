@@ -36,9 +36,9 @@ def align_positions(
     fixed coordinate system. Further, let the relationship between the two reference
     systems be described as
 
-    positions_from = rotation_object.apply(positions_to) + translation
+    positions_from = rotation.apply(positions_to) + translation
 
-    This function finds the rotation_object and translation by matching the two
+    This function finds the rotation and translation by matching the two
     coordinate systems, and represent the transformation through a Transform object.
     For robustness it is adviced to use more than 2 positions in alignment and using
     positions with some distance to each other.
@@ -68,13 +68,13 @@ def align_positions(
     except Exception as e:
         raise ValueError(e)
 
-    rotation_object, rmsd_rot, sensitivity = Rotation.align_vectors(
+    rotation, rmsd_rot, sensitivity = Rotation.align_vectors(
         edges_2, edges_1, return_sensitivity=True
     )
 
     translations: Translation = Translation.from_array(
         np.mean(
-            positions_to.to_array() - rotation_object.apply(positions_from.to_array()),
+            positions_to.to_array() - rotation.apply(positions_from.to_array()),
             axis=0,  # type:ignore
         ),
         from_=positions_from.frame,
@@ -84,7 +84,7 @@ def align_positions(
         from_=positions_from.frame,
         to_=positions_to.frame,
         translation=translations,
-        rotation_object=rotation_object,
+        rotation=rotation,
     )
 
     try:

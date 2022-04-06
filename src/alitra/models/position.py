@@ -57,8 +57,8 @@ class Positions:
 
     @staticmethod
     def from_array(position_array: np.ndarray, frame: Frame) -> Positions:
-        if position_array.shape[1] != 3:
-            raise ValueError("position_array should have shape (3,N)")
+        if len(position_array.shape) < 2 or position_array.shape[1] != 3:
+            raise ValueError("position_array should have shape (N,3)")
         positions: List[Position] = []
         for position in position_array:
             positions.append(

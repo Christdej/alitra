@@ -3,12 +3,10 @@ from typing import Union
 import numpy as np
 from scipy.spatial.transform.rotation import Rotation
 
-from .models.euler import Euler
 from .models.frame import Frame
 from .models.orientation import Orientation
 from .models.pose import Pose
 from .models.position import Position, Positions
-from .models.quaternion import Quaternion
 from .models.transform import Transform
 
 
@@ -26,25 +24,25 @@ def transform_position(
     :param to_: Destination Frame, must be different to "from_".
     :return: Position or Positions in the to_ coordinate system.
     """
-    if from_ == to_:
-        return positions
-
     if positions.frame != from_:
         raise ValueError(
             f"Expected positions in frame {from_} "
             + f", got positions in frame {positions.frame}"
         )
 
+    if from_ == to_:
+        return positions
+
     result: np.ndarray
     if from_ == transform.to_ and to_ == transform.from_:
         """Using the inverse transform"""
-        result = transform.rotation_object.apply(
+        result = transform.rotation.apply(
             positions.to_array() - transform.translation.to_array(),
             inverse=True,
         )
     elif from_ == transform.from_ and to_ == transform.to_:
         result = (
-            transform.rotation_object.apply(positions.to_array())
+            transform.rotation.apply(positions.to_array())
             + transform.translation.to_array()
         )
     else:
@@ -72,69 +70,13 @@ def transform_rotation(
 
     if from_ == transform.to_ and to_ == transform.from_:
         "Using the inverse transform"
-        rotation_to = rotation * transform.rotation_object.inv()
+        rotation_to = rotation * transform.rotation.inv()
     elif from_ == transform.from_ and to_ == transform.to_:
-        rotation_to = rotation * transform.rotation_object
+        rotation_to = rotation * transform.rotation
     else:
         raise ValueError("Transform not specified")
 
     return rotation_to
-
-
-def transform_quaternion(
-    transform: Transform,
-    quaternion: Quaternion,
-    from_: Frame,
-    to_: Frame,
-) -> Quaternion:
-    """
-    Transforms a quaternion rotation from from_ to to_ (rotation)
-    :param transform: Transform between two coordinate systems
-    :param quaternion: Quaternion in the from_ coordinate system.
-    :param from_: Source Frame, must be different to "to_".
-    :param to_: Destination Frame, must be different to "from_".
-    :return: Quaternion in the to_ coordinate system.
-    """
-
-    if not isinstance(quaternion, Quaternion):
-        raise ValueError("Incorrect input format. Must be Quaternion.")
-
-    if from_ == to_:
-        return quaternion
-
-    rotation: Rotation = Rotation.from_quat(quaternion.to_array())
-
-    rotation_to = transform_rotation(transform, rotation, from_, to_)
-
-    quaterntion_to: Quaternion = Quaternion.from_array(rotation_to.as_quat(), frame=to_)
-
-    return quaterntion_to
-
-
-def transform_euler(
-    transform: Transform, euler: Euler, from_: Frame, to_: Frame, seq="ZYX"
-) -> Euler:
-    """
-    Transforms an euler rotation from from_ to to_ (rotation)
-    :param transform: Transform between two coordinate systems
-    :param euler: Euler in the from_ coordinate system.
-    :param from_: Source Frame, must be different to "to_".
-    :param to_: Destination Frame, must be different to "from_".
-    :return: Euler in the to_ coordinate system.
-    """
-
-    if not isinstance(euler, Euler):
-        raise ValueError("Incorrect input format. Must be Euler")
-
-    if from_ == to_:
-        return euler
-
-    rotation: Rotation = Rotation.from_euler(seq=seq, angles=euler.to_array())
-
-    rotation_to = transform_rotation(transform, rotation, from_, to_)
-
-    euler_to: Euler = Euler.from_array(rotation_to.as_euler(seq=seq), frame=to_)
-    return euler_to
 
 
 def transform_orientation(
@@ -155,9 +97,8 @@ def transform_orientation(
     if from_ == to_:
         return orientation
 
-    quaternion = Quaternion.from_array(orientation.to_array(), from_)
-    quaternion_to = transform_quaternion(transform, quaternion, from_, to_)
-    return Orientation.from_array(quaternion_to.to_array(), to_)
+    rotation_to = transform_rotation(transform, orientation.rotation, from_, to_)
+    return Orientation(rotation=rotation_to, frame=to_)
 
 
 def transform_pose(transform: Transform, pose: Pose, from_: Frame, to_: Frame) -> Pose:

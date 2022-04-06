@@ -44,4 +44,5 @@ This will install package in _editable_ mode. Convenient for local development
 ### How to use
 
 The tests in this repository can be used as examples
-of how to use the different models and functions
+of how to use the different models and functions. The
+[test_example.py](tests/test_example.py) is a good place to start

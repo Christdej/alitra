@@ -1,14 +1,13 @@
 import pytest
 
-from alitra.models import Euler, Transform, Translation
+from alitra.models import Transform, Translation
 
 
-def test_transform(robot_frame, asset_frame):
+def test_transform(default_rotation, robot_frame, asset_frame):
     with pytest.raises(ValueError):
-        euler = Euler(frame=robot_frame)
         translation = Translation(1, 1, from_=robot_frame, to_=asset_frame)
-        Transform.from_euler(
-            translation, euler=euler, from_=asset_frame, to_=robot_frame
+        Transform(
+            translation, rotation=default_rotation, from_=asset_frame, to_=robot_frame
         )
 
 

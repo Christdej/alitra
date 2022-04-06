@@ -8,20 +8,20 @@ asset coordinate-frame.
 
 >>> import numpy as np
 >>> from alitra import align_frames
->>> from alitra.models import Euler, Quaternion, PositionList, Transform, Translation
+>>> from alitra.models import Positions, Transform, Translation
 
 Setting up rotations, translations and positions for transformation
 
 >>> robot_frame = Frame("robot")
 >>> asset_frame = Frame("asset")
->>> euler = Euler(psi=np.pi / 4, from_=robot_frame, to_=asset_frame).to_array()
+>>> euler = np.array([np.pi / 4, 0, 0])
 >>> translation = Translation(x=1, y=0, from_=robot_frame, to_=asset_frame)
->>> p_robot = PositionList.from_array(np.array([[1, 1, 0], [10, 1, 0]]), frame=robot_frame)
+>>> p_robot = Positions.from_array(np.array([[1, 1, 0], [10, 1, 0]]), frame=robot_frame)
 >>> rotation_axes = "z"
 
 Making the transform
 
->>> transform = Transform.from_euler(
+>>> transform = Transform.from_euler_array(
 ...    translation=translation, euler=euler, from_=robot_frame, to_=asset_frame
 ... )
 
@@ -33,14 +33,11 @@ If you have one position in two different frames and the rotation between the ax
 between the two frames.
 
 >>> transform = Transform(p_robot, p_asset, rotation_axes)
-
 """
 
 from alitra.alignment import align_maps, align_positions
 from alitra.transformations import (
-    transform_euler,
     transform_orientation,
     transform_pose,
     transform_position,
-    transform_quaternion,
 )

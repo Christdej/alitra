@@ -2,11 +2,10 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
+import numpy as np
 from scipy.spatial.transform import Rotation
 
-from .euler import Euler
 from .frame import Frame
-from .quaternion import Quaternion
 from .translation import Translation
 
 
@@ -14,15 +13,15 @@ from .translation import Translation
 class Transform:
     """
     A transform object that describe the transformation between two frames.
-    Euler or quaternion must be provided to perform a rotation. If no rotation is
-    required specify the unit quaternion or zero Euler angles. Translations must be
+    Contains a scipy rotation object a translation and two frames.
+    Can be created from euler array or quaternion array. Translations must be
     expressed in the (to_) frame
     """
 
     translation: Translation
     from_: Frame
     to_: Frame
-    rotation_object: Rotation = None
+    rotation: Rotation = None
 
     def __post_init__(self):
         if (
@@ -34,28 +33,28 @@ class Transform:
             )
 
     @staticmethod
-    def from_euler(
-        translation: Translation, euler: Euler, from_: Frame, to_: Frame, seq="ZYX"
+    def from_euler_array(
+        translation: Translation, euler: np.ndarray, from_: Frame, to_: Frame, seq="ZYX"
     ) -> Transform:
-        rotation_object = Rotation.from_euler(seq=seq, angles=euler.to_array())
+        rotation = Rotation.from_euler(seq=seq, angles=euler)
         return Transform(
             translation=translation,
             from_=from_,
             to_=to_,
-            rotation_object=rotation_object,
+            rotation=rotation,
         )
 
     @staticmethod
-    def from_quat(
+    def from_quat_array(
         translation: Translation,
-        quat: Quaternion,
+        quat: np.ndarray,
         from_: Frame,
         to_: Frame,
     ) -> Transform:
-        rotation_object = Rotation.from_quat(quat.to_array())
+        rotation = Rotation.from_quat(quat)
         return Transform(
             translation=translation,
             from_=from_,
             to_=to_,
-            rotation_object=rotation_object,
+            rotation=rotation,
         )
